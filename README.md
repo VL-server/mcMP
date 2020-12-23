@@ -1,4 +1,4 @@
-<b>How To Use in Linux</b>
+<b>How To Use in TERMUX</b>
 ```bash
 > apt-get install wget -y
 > chmod +rwx mcMP/playing
