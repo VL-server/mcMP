@@ -1,45 +1,49 @@
 #!/usr/bin/env bash
-home="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )";pwd)"
-cd $home
-if [ -r bin/date ];then
-echo "[`bin/date +%R`] Starting server..."
-if [ -r assets.zip ];then
-	if [ -r .cache ];then
-		cp assets.zip .cache
-		cd .cache
-		if [ -r $home/bin/unzip ];then
-			./../bin/unzip assets.zip
-			cp -r assets $home
-			/usr/bin/rm *
-			cd $home
-		else
-			echo "E: bin/unzip Not found!"
+DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")";pwd)"
+cd $DIR
+
+php(){
+if [ -r $DIR/bin/php ];then
+$DIR/bin/php "$@";else echo "[x] PHP_binary not found!";exit 1
+fi;}
+date(){
+if [ -r $DIR/bin/date ];then
+$DIR/bin/date "$@";else echo "[x] DATE_binary not found!";exit 1
+fi;}
+unzip(){
+if [ -r $DIR/bin/unzip ];then
+$DIR/bin/unzip "$@"else echo "[x] UNZIP_binary not found!";exit 1
+fi;}
+sh(){
+if [ -r $DIR/bin/sh ];then
+$DIR/bin/sh "$@";else echo "[x] SH_binary not found!";exit 1
+fi;}
+
+if [ -r $DIR/.extract ];then
+	sleep 0.00000000000000000000000000000000001
+else
+	mkdir $DIR/.extract
+	if [ -r $DIR/assets.zip ];then
+		cp -r $DIR/assets.zip $DIR/.extract
+		cd $DIR/.extract
+		unzip assets.zip
+		if [ -r assets ];then
+			cp -r assets $DIR
 			rm -r *
-			exit 1
+			cd $DIR
+			rm -r .extract/
+		else
+			echo "E: assets.zip Failed to extract"
+			rm -r .extract/
+			exit 2
 		fi
 	else
-		mkdir .cache
-		cp assets.zip .cache
-		cd .cache
-		if [ -r $home/bin/unzip ];then
-			./../bin/unzip assets.zip
-			/usr/bin/rm *
-			cd $home
-		else
-			echo "E: bin/unzip Not found!"
-			rm -r *
-			exit 1
-		fi
+		echo "E: assets.zip Not found!"
+		cd $DIR
+		rm -r .extract
+		exit 1
 	fi
-else
-	echo "E: assets.zip Not found!"
-	exit 1
 fi
-###
-# PHP mode / belum selesai
-# Python mode
-###
-else
-	echo "E: bin/date Not found!"
-	exit 1
-fi
+
+# EXEC TO PHP_BINARY
+echo "$#"
