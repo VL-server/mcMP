@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+home="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )";pwd)"
+cd $home
+if [ -r bin/date ];then
+echo "[`bin/date +%R`] Starting server..."
+if [ -r assets.zip ];then
+	if [ -r .cache ];then
+		cp assets.zip .cache
+		cd .cache
+		if [ -r $home/bin/unzip ];then
+			./../bin/unzip assets.zip
+			cp -r assets $home
+			/usr/bin/rm *
+			cd $home
+		else
+			echo "E: bin/unzip Not found!"
+			rm -r *
+			exit 1
+		fi
+	else
+		mkdir .cache
+		cp assets.zip .cache
+		cd .cache
+		if [ -r $home/bin/unzip ];then
+			./../bin/unzip assets.zip
+			/usr/bin/rm *
+			cd $home
+		else
+			echo "E: bin/unzip Not found!"
+			rm -r *
+			exit 1
+		fi
+	fi
+else
+	echo "E: assets.zip Not found!"
+	exit 1
+fi
+###
+# PHP mode
+# Python mode
+###
+else
+	echo "E: bin/date Not found!"
+	exit 1
+fi
