@@ -36,7 +36,7 @@ else
 	exit 1
 fi
 ###
-# PHP mode
+# PHP mode / belum selesai
 # Python mode
 ###
 else
